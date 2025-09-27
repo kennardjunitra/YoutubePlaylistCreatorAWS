@@ -1,0 +1,50 @@
+{
+  "competition_id": "serieA",
+  "latest_date": "2025-03-30"
+}
+
+curl -X POST https://youtubeplaylistcreator-117353943789.asia-southeast1.run.app/create_playlist \
+-H "Authorization: bearer $(gcloud auth print-identity-token)" \
+-H "Content-Type: application/json" \
+-H ": " \
+-d '{
+  "competition_id": "serieA",
+  "latest_date": "2025-03-30"
+}'
+
+//right API key Test mode
+curl -X POST https://youtubeplaylistcreator-117353943789.asia-southeast1.run.app/create_playlist \
+-H "Authorization: bearer $(gcloud auth print-identity-token)" \
+-H "Content-Type: application/json" \
+-H "x-api-key: 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" \
+-H "X-Test-Mode: true" \
+-H ": " \
+-d '{
+  "competition_id": "serieA",
+  "latest_date": "2025-03-30"
+
+}'
+
+//wrong API key
+curl -X POST https://youtubeplaylistcreator-117353943789.asia-southeast1.run.app/create_playlist \
+-H "Authorization: bearer $(gcloud auth print-identity-token)" \
+-H "Content-Type: application/json" \
+-H ": " \
+-d '{
+  "competition_id": "serieA",
+  "latest_date": "2025-03-30"
+
+}'
+
+//right API key
+curl -X POST https://youtubeplaylistcreator-117353943789.asia-southeast1.run.app/create_playlist \
+-H "Authorization: bearer $(gcloud auth print-identity-token)" \
+-H "Content-Type: application/json" \
+-H "x-api-key: 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" \
+-H "X-Test-Mode: false" \
+-H ": " \
+-d '{
+  "competition_id": "serieA",
+  "latest_date": "2025-03-30"
+
+}'

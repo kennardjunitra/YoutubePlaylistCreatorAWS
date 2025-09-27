@@ -1,0 +1,3 @@
+curl -X POST https://youtubeplaylistcreator-117353943789.asia-southeast1.run.app/create_playlist 
+  -H "Content-Type: application/json" \
+  -d '{"competition_id": "nba", "latest_date": "2025-03-27"}'

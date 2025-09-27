@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YouTube Playlist Creator</title>
+</head>
+<body>
+  <h1>YouTube Playlist Creator</h1>
+
+  <div id="authSection">
+    <button onclick="startOAuth()">Login with Google</button>
+  </div>
+
+  <div id="formSection" style="display:none;">
+    <form id="playlistForm">
+      <label for="competition_id">Competition:</label>
+      <select id="competition_id" name="competition_id">
+        <option value="premier_league">Premier League</option>
+        <option value="serie_a">Serie A</option>
+        <option value="la_liga">La Liga</option>
+        <option value="champions_league">Champions League</option>
+        <option value="europa_league">Europa League</option>
+        <option value="tennis">Tennis</option>
+        <option value="formula1">Formula 1</option>
+        <option value="bundesliga">Bundesliga</option>
+        <option value="nba">NBA</option>
+	<option value="all">All</option>
+      </select>
+    <br><br>
+      <label for="earliestDate">Latest Date (YYYY-MM-DD):</label>
+    <input type="date" id="earliestDate" name="earliestDate" required>
+    <br><br>
+      <label for="apiKey">API Key:</label>
+    <input type="text" id="apiKey" name="apiKey" required>
+    <br><br>
+     <label for="testMode">Test Mode:</label>
+    <input type="checkbox" id="testMode" name="testMode" checked>
+    <br><br>
+      <button type="submit">Create Playlist</button>
+    </form>
+  </div>
+
+  <div id="result"></div>
+  <script>
+    const CLIENT_ID = '117353943789-spkcthpap1g4hl9146lmtm0khgpugcge.apps.googleusercontent.com';
+    // ✅ Auto-detect environment and adjust redirect URI
+    const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+    const REDIRECT_URI = isLocalhost ? "http://localhost:8080/" : "https://btjxje4iim.ap-southeast-1.awsapprunner.com/";
+
+    let authCode = null;
+
+    function startOAuth() {
+      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/youtube&access_type=offline&prompt=consent`;
+      window.location.href = authUrl;
+    }
+
+    window.onload = () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('code')) {
+        authCode = params.get('code');
+        document.getElementById('authSection').style.display = 'none';
+        document.getElementById('formSection').style.display = 'block';
+      }
+    }
+
+    document.getElementById("playlistForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const competition_id = document.getElementById("competition_id").value.trim();
+      const earliestDate = document.getElementById("earliestDate").value;
+      const apiKey = document.getElementById("apiKey").value.trim();
+      const testMode = document.getElementById("testMode").checked;
+
+      if (!competition_id || !earliestDate || !authCode) {
+        alert("Missing input or authentication.");
+        return;
+      }
+
+      const response = await fetch("/create_playlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey,
+          "X-Test-Mode": testMode ? "true" : "false"
+        },
+        body: JSON.stringify({
+          code: authCode,
+          competition_id: competition_id,
+          earliest_date: earliestDate
+        })
+      });
+
+      const result = await response.json();
+      document.getElementById("result").innerText = JSON.stringify(result, null, 2);
+    });
+  </script>
+</body>
+</html>
