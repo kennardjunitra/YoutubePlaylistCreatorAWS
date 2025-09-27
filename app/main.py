@@ -251,7 +251,7 @@ def create_playlist():
                 return jsonify({"error": "❌ YouTube API test failed"}), 500
 
         # ---- Load channel map (bundled file) ----
-        with open("channels.json") as f:
+        with open("app/channels.json", "r", encoding="utf-8") as f:
             CHANNEL_MAP = json.load(f)
 
         config = CHANNEL_MAP.get(competition_id)
