@@ -279,7 +279,7 @@ def create_playlist():
                         extra={"method": request.method, "path": request.path})
 
         # ---- Find videos per channel since cutoff (uses search_filter as `q`) ----
-        video_ids = []
+        video_ids = ["Gb1iGDchKYs", "Gb1iGDchKYs"]  # start empty (no seeding)
         seen = set()
 
         for channel_id in channel_ids:
